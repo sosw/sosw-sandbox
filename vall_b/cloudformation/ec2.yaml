@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: My learning CloudFormation template for creating an EC2 instance
+
+Parameters:
+  VPCid:
+    Description: ID of an existing VPC
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Description: ID of required subnet
+    Type: AWS::EC2::Subnet::Id
+
+
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "ami-052c9ea013e6e3567"
+      KeyName: "aws_studying_key"
+      InstanceType: "t3.nano"
+      AvailabilityZone: "us-west-2a"
+      SubnetId: !Ref SubnetId
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPCid
+      GroupDescription: Enable SSH
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
