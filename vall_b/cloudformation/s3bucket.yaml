@@ -5,6 +5,11 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: sosw-vall-9923-8278-3020
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
@@ -14,6 +19,7 @@ Resources:
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
+        Version: '2012-10-17'
         Statement:
           - Sid: PublicReadGetObject
             Effect: Allow
