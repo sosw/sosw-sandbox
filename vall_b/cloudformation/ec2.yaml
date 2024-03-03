@@ -19,6 +19,8 @@ Resources:
       InstanceType: "t3.nano"
       AvailabilityZone: "us-west-2a"
       SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - Ref: InstanceSecurityGroup
       Tags:
         - {Key: Name, Value: 'bastion'}
 
