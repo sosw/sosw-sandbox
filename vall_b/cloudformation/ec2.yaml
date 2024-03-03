@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: My learning CloudFormation template for creating an EC2 instance
+
+Parameters:
+  VPCid:
+    Description: ID of an existing VPC
+    Type: AWS::EC2::VPC::Id
+  SubnetId:
+    Description: ID of required subnet
+    Type: AWS::EC2::Subnet::Id
+
+
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "ami-052c9ea013e6e3567"
+      KeyName: "aws_studying_key"
+      InstanceType: "t3.nano"
+      AvailabilityZone: "us-west-2a"
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - Ref: InstanceSecurityGroup
+      Tags:
+        - {Key: Name, Value: 'bastion'}
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPCid
+      GroupDescription: Enable SSH
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '1024'
+          ToPort: '65535'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: icmp
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: icmp
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp: 0.0.0.0/0
