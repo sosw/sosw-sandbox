@@ -17,8 +17,8 @@ Resources:
               - "sts:AssumeRole"
 
       Path: "/"
-#      ManagedPolicyArns:
-#        - !Sub "arn:aws:iam::aws:policy/service-role/${ExecutionPolicy}"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 
 #      Policies:
 #        - PolicyName: "SoswWorkerAssistantPermissions"
@@ -35,7 +35,7 @@ Resources:
       Handler: app.lambda_handler
       Code:
 
-        S3Bucket: !Sub "s3-control-bucket-${AWS::AccountId}"
+        S3Bucket: !Sub "sosw-s3-${AWS::AccountId}"
         S3Key: lambda_packages/sys_lambda_env_setter.zip
       Layers:
         - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1"
