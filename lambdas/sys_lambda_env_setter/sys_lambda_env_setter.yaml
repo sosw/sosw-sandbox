@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: sys_lambda_env_setter
+
+Resources:
+
+  SysLambdaEnvSetterRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+
+      Path: "/"
+#      ManagedPolicyArns:
+#        - !Sub "arn:aws:iam::aws:policy/service-role/${ExecutionPolicy}"
+
+#      Policies:
+#        - PolicyName: "SoswWorkerAssistantPermissions"
+#          PolicyDocument:
+#            Version: "2012-10-17"
+#            Statement:
+      RoleName: "sys_lambda_env_setter_role"
+
+  SysLambdaEnvSetterFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.11
+      Role: !GetAtt SysLambdaEnvSetterRole.Arn
+      Handler: app.lambda_handler
+      Code:
+
+        S3Bucket: !Sub "s3-control-bucket-${AWS::AccountId}"
+        S3Key: lambda_packages/sys_lambda_env_setter.zip
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1"
+
+      Description: Set environmental variables for Lambda functions
