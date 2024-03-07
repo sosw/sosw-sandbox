@@ -14,7 +14,7 @@ class Processor(SoswProcessor):
 
     }
 
-    lambda_client = boto3.client('lambda')
+    lambda_client: boto3.client = None
 
     def get_config(self, name):
         pass
@@ -26,23 +26,31 @@ class Processor(SoswProcessor):
         # Get current environment variables
         try:
             response = self.lambda_client.get_function_configuration(FunctionName=event['function'])
-            current_env_variables = response['Environment']['Variables']
+            if 'Environment' in response:
+                current_env_variables = response['Environment']['Variables']
+            else:
+                current_env_variables = []
 
         except self.lambda_client.exceptions.ClientError:
             return f"Lambda function '{event['function']}' not found"
+        logger.info(current_env_variables)
 
         # Update or add new environment variables
-
-        current_env_variables[event['key']] = event['value']
+        if event.get('value') is None:
+            current_env_variables.pop(event['key'])
+            logger.info("Removing empty variable: %s", event['key'])
+        else:
+            current_env_variables[event['key']] = event['value']
 
         # Update lambda function configuration with the new environment variables
 
-        self.lambda_client.update_function_configuration(
+        response = self.lambda_client.update_function_configuration(
             FunctionName=event['function'],
             Environment={
                 'Variables': current_env_variables
             }
         )
+        logger.info(response)
 
 
 global_vars = LambdaGlobals()

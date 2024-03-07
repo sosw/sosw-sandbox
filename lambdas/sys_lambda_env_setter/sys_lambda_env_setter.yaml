@@ -20,16 +20,23 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 
-#      Policies:
-#        - PolicyName: "SoswWorkerAssistantPermissions"
-#          PolicyDocument:
-#            Version: "2012-10-17"
-#            Statement:
+      Policies:
+        - PolicyName: "SysLambdaEnvSetterCustom"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:GetFunctionConfiguration
+                  - lambda:UpdateFunctionConfiguration
+                Resource: '*'
+
       RoleName: "sys_lambda_env_setter_role"
 
   SysLambdaEnvSetterFunction:
     Type: AWS::Lambda::Function
     Properties:
+      FunctionName: sys_lambda_env_setter
       Runtime: python3.11
       Role: !GetAtt SysLambdaEnvSetterRole.Arn
       Handler: app.lambda_handler
