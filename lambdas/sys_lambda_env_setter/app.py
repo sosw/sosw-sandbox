@@ -11,7 +11,6 @@ class Processor(SoswProcessor):
 
     DEFAULT_CONFIG = {
         'init_clients':    ['lambda'],
-
     }
 
     lambda_client: boto3.client = None
@@ -25,7 +24,7 @@ class Processor(SoswProcessor):
         assert all(x in event for x in ('function', 'key', 'value')), "Missing required parameters in event"
         # Get current environment variables
         try:
-            response = self.lambda_client.get_function_configuration(FunctionName=event['function'])
+            response = self.lambda_client.get_function_configuration(FunctionName=event['function']) #TODO write a test with magickmock
             if 'Environment' in response:
                 current_env_variables = response['Environment']['Variables']
             else:
