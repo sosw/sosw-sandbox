@@ -34,9 +34,19 @@ class app_UnitTestCase(unittest.TestCase):
 
     @mock.patch("boto3.client")
     def test_response_get_config(self, mock_boto3_client):
-        mock_get_func_config = MagicMock(return_value={"my_config_key": "my_config_value"})
-        #mock_boto3_client.return_value_configuration
- #response = self.lambda_client.get_function_configuration(FunctionName=event['function']) #TODO write a test with magickmock
+
+        processor_instance = Processor()
+        mock_get_func_config = mock.MagicMock(return_value={"my_config_key": "my_config_value"})
+        mock_boto3_client.return_value.get_function_configuration = mock_get_func_config
+
+        with mock.patch.object(processor_instance, 'lambda_client', mock_boto3_client):
+
+            response = processor_instance.get_config({"my_config_key": "my_config_value"})
+
+            # Assertions
+            self.assertEqual(response, None)
+            mock_get_func_config.assert_called_once_with(FunctionName='function')
+
 
 if __name__ == '__main__':
     unittest.main()
