@@ -6,16 +6,17 @@ Parameters:
     Description: An environment name that is prefixed to resource names
     Type: String
 
-  VpcCIDR:
+  CidrPrefix:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
-    Default: 10.29.0.0/16
+    Default: 10.29
+
 
 Resources:
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref VpcCIDR
+      CidrBlock: !Sub "${CidrPrefix}.0.0/16"
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
@@ -40,7 +41,7 @@ Resources:
     Properties:
       VpcId: !Ref MyVPC
       AvailabilityZone: us-west-2a
-      CidrBlock: 10.29.6.0/24
+      CidrBlock: !Sub "${CidrPrefix}.6.0/24"
       MapPublicIpOnLaunch: true
 
   PublicSubnet2:
@@ -48,7 +49,7 @@ Resources:
     Properties:
       VpcId: !Ref MyVPC
       AvailabilityZone: us-west-2b
-      CidrBlock: 10.29.7.0/24
+      CidrBlock: !Sub "${CidrPrefix}.7.0/24"
       MapPublicIpOnLaunch: true
 
 
