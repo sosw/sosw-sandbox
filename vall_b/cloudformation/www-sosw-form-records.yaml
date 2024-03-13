@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: DDB Table for www-sosw website forms
+Resources:
+  myDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "www-sosw-form-records"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "form_id"
+          AttributeType: "S"
+        - AttributeName: "created_at"
+          AttributeType: "N"
+
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+
+      GlobalSecondaryIndexes:
+        - IndexName: "form"
+          KeySchema:
+            - AttributeName: "form_id"
+              KeyType: "HASH"
+            - AttributeName: "created_at"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              #              - "All"
+              - "name"
+              - "email"
+              - "phone"
+              - "user_id"
+            ProjectionType: "INCLUDE"
+

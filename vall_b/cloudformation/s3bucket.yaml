@@ -1,28 +1,37 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: My learning CloudFormation template for creating an S3 bucket
 Resources:
-  S3Bucket:
+#  S3Bucket:
+#    Type: 'AWS::S3::Bucket'
+#    Properties:
+#      BucketName: sosw-vall-9923-8278-3020
+#      PublicAccessBlockConfiguration:
+#        BlockPublicAcls: false
+#        BlockPublicPolicy: false
+#        IgnorePublicAcls: false
+#        RestrictPublicBuckets: false
+#      WebsiteConfiguration:
+#        IndexDocument: index.html
+#        ErrorDocument: error.html
+#
+#  S3BucketPolicy:
+#    Type: 'AWS::S3::BucketPolicy'
+#    Properties:
+#      Bucket: !Ref S3Bucket
+#      PolicyDocument:
+#        Version: '2012-10-17'
+#        Statement:
+#          - Sid: PublicReadGetObject
+#            Effect: Allow
+#            Principal: '*'
+#            Action: 's3:GetObject'
+#            Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+
+  S3ControlBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: sosw-vall-9923-8278-3020
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
+      BucketName: !Sub "sosw-s3-${AWS::AccountId}"
 
-  S3BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: PublicReadGetObject
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Sub 'arn:aws:s3:::${S3Bucket}/*'
+
+
+
