@@ -1,11 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: My VPC example
+Description: My VPC learning example
 
 Parameters:
   CidrPrefix:
     Type: String
     Default: 10.7
-
 
 Resources:
   MyVPC:
