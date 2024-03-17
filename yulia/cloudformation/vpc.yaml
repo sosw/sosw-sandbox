@@ -83,6 +83,7 @@ Resources:
       SubnetId: !Ref PublicSubnet
 
   PrivateRouteTable:
+    DependsOn: NatGateway
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref MyVPC
@@ -95,7 +96,7 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateRouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      NatGateWayId: !Ref NatGateway
+      NatGatewayId: !Ref NatGateway
 
   PrivateSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
