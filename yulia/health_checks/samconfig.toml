@@ -1,0 +1,12 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "heath-checks"
+s3_prefix = "heath-checks"
+#parameter_overrides = "Stage=\"prod\""
+region = "us-east-1"
+resolve_s3 = true
+source = "src/"
+confirm_changeset = false
+force-upload = true
+capabilities = "CAPABILITY_IAM"

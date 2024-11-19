@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a Route 53 Health Check
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: "The domain name for the Route53 HealthCheck"
+    Default: "yulia.sosw.app"
+
+Resources:
+  TestHealthCheck:
+    Type: AWS::Route53::HealthCheck
+    Properties:
+      HealthCheckConfig:
+        FullyQualifiedDomainName: !Ref DomainName
+        Port: 443
+        Type: HTTPS
+        ResourcePath: "/"
+        RequestInterval: 30            # Check every 30 seconds
+        FailureThreshold: 3            # Mark unhealthy after 3 failed checks
+        MeasureLatency: true
+        Inverted: false                # Regular (non-inverted) health check
+        EnableSNI: true                # Set to true for HTTPS
+        Regions:                       # Valid Route 53 health check regions
+          - "us-east-1"
+          - "us-west-1"
+          - "eu-west-1"
+      HealthCheckTags:
+        - Key: "Name"
+          Value: "TestHealthCheck"
+
+Outputs:
+  HealthCheckID:
+    Description: Health Check ID for yulia.sosw.app
+    Value: !Ref TestHealthCheck
